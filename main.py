@@ -45,32 +45,29 @@ def run_experiment(exp_dir: Path):
     for scenario in scenarios:
         print(f"\n--- Running Scenario: {scenario.upper()} ---")
         # Load prompts for the current scenario
-        system_prompt = read_file(PROMPTS_DIR / scenario / "system.txt")
-        user_prompt_template = read_file(PROMPTS_DIR / scenario / "user.txt")
+        # system_prompt = read_file(PROMPTS_DIR / scenario / "system.txt").format(categories=', '.join(categories))
+        system_prompt = read_file(PROMPTS_DIR / "system.txt").format(categories=', '.join(categories))
+        # user_prompt_template = read_file(PROMPTS_DIR / scenario / "user.txt")
 
         results = {}
         for msg in messages:
-            # Build the list of messages for the API call
+            
             message_list = [
                 {"role": "system", "content": system_prompt}
             ]
 
-            # Add examples for one-shot and few-shot scenarios
-            if scenario == "one_shot":
-                example = shot_examples.get("examples", [])[0]
-                user_example_prompt = user_prompt_template.format(categories=', '.join(categories), message=example['message'])
-                message_list.append({"role": "user", "content": user_example_prompt})
-                message_list.append({"role": "assistant", "content": example['categories']})
-            
-            elif scenario == "few_shot":
-                for example in shot_examples.get("examples", []):
-                    user_example_prompt = user_prompt_template.format(categories=', '.join(categories), message=example['message'])
-                    message_list.append({"role": "user", "content": user_example_prompt})
+            if scenario == 'zero_shot':
+                message_list.append({"role": "user", "content": msg})
+
+            else:
+                for example in shot_examples['examples']:
+                    message_list.append({"role": "user", "content": example['message']})
                     message_list.append({"role": "assistant", "content": example['categories']})
 
-            # Add the final user message to be classified
-            final_user_prompt = user_prompt_template.format(categories=', '.join(categories), message=msg)
-            message_list.append({"role": "user", "content": final_user_prompt})
+                    if scenario == 'one_shot':
+                        break
+
+                message_list.append({"role": "user", "content": msg})
 
             predicted_categories = classifier.classify_message(message_list)
             results[msg] = predicted_categories
