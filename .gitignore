@@ -1,0 +1,16 @@
+# Virtual Environment
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE-specific
+.vscode/
+.idea/
+
+# OS-specific
+.DS_Store
+
+*pytest.ini

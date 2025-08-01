@@ -1,0 +1,4 @@
+Classify the following message into one or more of these categories: {categories}.
+
+Message: "{message}"
+Categories:

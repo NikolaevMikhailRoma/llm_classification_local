@@ -1,0 +1,16 @@
+{
+  "examples": [
+    {
+      "message": "I'm learning how to cook a new fish dish",
+      "categories": "learning, food"
+    },
+    {
+      "message": "My cat is chasing the red laser dot",
+      "categories": "animals"
+    },
+    {
+      "message": "He scored a goal in the last minute of the game",
+      "categories": "sports"
+    }
+  ]
+}
